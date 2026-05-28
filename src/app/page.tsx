@@ -10,10 +10,10 @@ export default function Home() {
         <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color }}>AgentFlow</span>
           <div style={{ display: "flex", gap: 12 }}>
-            <a href="https://calendly.com/wikolabs" target="_blank" rel="noopener noreferrer"
+            <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' type="button" target="_blank" rel="noopener noreferrer"
               style={{ background: color, color: "#fff", padding: "8px 20px", borderRadius: 8, fontWeight: 600, fontSize: 14, textDecoration: "none" }}>
               Réserver une démo
-            </a>
+            </button>
           </div>
         </div>
       </nav>
@@ -32,10 +32,10 @@ export default function Home() {
             Pipelines d&apos;agents IA visuels — connectez, testez et déployez vos workflows IA sans code en 10 minutes.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
-            <a href="https://calendly.com/wikolabs" target="_blank" rel="noopener noreferrer"
+            <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' type="button" target="_blank" rel="noopener noreferrer"
               style={{ background: color, color: "#fff", padding: "14px 28px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>
               Réserver une démo
-            </a>
+            </button>
             <a href="https://wa.me/261386626100?text=Bonjour%2C%20je%20souhaite%20discuter%20de%20AgentFlow%20avec%20Wikolabs." target="_blank" rel="noopener noreferrer"
               style={{ background: "#25d366", color: "#fff", padding: "14px 28px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>
               WhatsApp
@@ -136,10 +136,10 @@ export default function Home() {
           </h2>
           <p style={{ color: "#c7d2fe", fontSize: 18, marginBottom: 36 }}>Démo guidée incluse. Sans carte bancaire.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://calendly.com/wikolabs" target="_blank" rel="noopener noreferrer"
+            <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' type="button" target="_blank" rel="noopener noreferrer"
               style={{ background: "#fff", color, padding: "14px 28px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>
               Réserver une démo
-            </a>
+            </button>
             <a href="https://wa.me/261386626100?text=Bonjour%2C%20je%20souhaite%20discuter%20de%20AgentFlow%20avec%20Wikolabs." target="_blank" rel="noopener noreferrer"
               style={{ background: "#25d366", color: "#fff", padding: "14px 28px", borderRadius: 10, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>
               WhatsApp
@@ -162,7 +162,7 @@ export default function Home() {
             <span>·</span>
             <a href="tel:+261386626100" style={{ color: "#a5b4fc", textDecoration: "none" }}>+261 38 66 261 00</a>
             <span>·</span>
-            <a href="https://calendly.com/wikolabs" target="_blank" rel="noopener noreferrer" style={{ color: "#a5b4fc", textDecoration: "none" }}>Prendre RDV</a>
+            <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' type="button" target="_blank" rel="noopener noreferrer" style={{ color: "#a5b4fc", textDecoration: "none" }}>Prendre RDV</button>
           </p>
           <p style={{ fontSize: 13, color: "#6366f1" }}>© 2026 Wikolabs. Tous droits réservés.</p>
         </div>

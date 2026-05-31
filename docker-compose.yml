@@ -1,10 +1,11 @@
 version: "3.9"
 
-# AgentFlow demo — production-ready POC.
+# agentflow demo - production-ready POC.
 # 2 services orchestrated:
 #   - agentflow (Next.js frontend on host port 3039)
 #   - agentflow-backend (FastAPI Python, internal only on 8000)
-# Internal network so the frontend can reach the backend by service name.
+# Shared external network wkdemo-net (created once by deploy.yml) avoids
+# Docker default address-pool exhaustion across all 47 LP stacks.
 
 services:
   agentflow-backend:
@@ -15,10 +16,22 @@ services:
       GROQ_API_KEY: ${GROQ_API_KEY:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     networks:
+      - wkdemo_net
+
+  agentflow:
+    image: ghcr.io/wikolabs/agentflow:latest
+    container_name: agentflow
+    restart: unless-stopped
+    ports:
+      - "3039:3000"
+    environment:
+      BACKEND_URL: "http://agentflow-backend:8000"
+    depends_on:
+      - agentflow-backend
+    networks:
+      - wkdemo_net
+
+networks:
   wkdemo_net:
     name: wkdemo-net
     external: true
-networks:
-  agentflow-net:
-    name: agentflow-net
-    driver: bridge

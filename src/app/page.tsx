@@ -1,359 +1,238 @@
 "use client";
 import { useState } from "react";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CONFIG — Each LP customizes only this block
-// ─────────────────────────────────────────────────────────────────────────────
-const P = {
-  name: "AgentFlow",
-  waPhone: "261386626100",
-  tools: [
-    { name: "OpenAI", slug: "openai" },
-    { name: "Anthropic", slug: "anthropic" },
-    { name: "Groq", slug: "groq" },
-    { name: "n8n", slug: "n8n" },
-    { name: "Python", slug: "python" },
-    { name: "Docker", slug: "docker" },
-  ],
-  palette: {
-    mode: "dark" as "dark" | "light",
-    bg: "#1A1228",
-    bg2: "#251A38",
-    surface: "rgba(255,255,255,0.04)",
-    border: "rgba(255,255,255,0.09)",
-    txt1: "#EFE8FC",
-    txt2: "#A898B8",
-    txt3: "#706080",
-    accent: "#A78BFA",
-    accentSoft: "rgba(167,139,250,0.12)",
-    accentBorder: "rgba(167,139,250,0.30)",
-    accentGlow: "rgba(167,139,250,0.18)",
-    navBg: "rgba(26,18,40,0.82)",
-  },
-  content: {
-    fr: {
-      langLabel: "FR",
-      tagLabel: "Orchestration multi-agents · Sans code · Fiable",
-      taglines: ["Des agents IA coordonnes.", "Des workflows automatises.", "Un business qui se pilote."],
-      taglineAccentIdx: 1,
-      desc: "AgentFlow orchestre plusieurs agents IA en parallele, coordonne les modeles, gere les dependances et execute vos workflows metier complexes avec fiabilite et tracabilite.",
-      navLinks: [
-        { label: "Fonctionnalites", href: "#features" },
-        { label: "Comment ca marche", href: "#process" },
-        { label: "Pourquoi maintenant", href: "#why" },
-        { label: "Contact", href: "#cta" },
-      ],
-      metrics: [
-        { value: "10x", label: "rapidite d'execution" },
-        { value: "99.9%", label: "fiabilite" },
-        { value: "∞", label: "workflows parallelisables" },
-        { value: "0", label: "code requis" },
-      ],
-      features: [
-        { icon: "🔀", title: "Orchestration visuelle", desc: "Definissez vos pipelines d'agents en glisser-deposer. Conditionnels, boucles, parallelisme — toute la complexite, sans une ligne de code." },
-        { icon: "🤖", title: "Coordination multi-modeles", desc: "GPT-4, Claude, Mistral, Llama — AgentFlow appelle le bon modele pour chaque etape. Optimisation automatique cout/performance." },
-        { icon: "📋", title: "Logs et tracabilite", desc: "Chaque action de chaque agent est loggee. Debug facile, audit complet, reproducibilite garantie. Confiance totale sur vos workflows critiques." },
-      ],
-      steps: [
-        { num: "01", title: "Dessinez votre workflow", desc: "Interface visuelle drag-and-drop. Ajoutez des agents, definissez les inputs/outputs, configurez les conditions. Aucun code necessaire." },
-        { num: "02", title: "Connectez vos outils", desc: "API REST, webhooks, bases de donnees, Slack, emails — AgentFlow s'integre a votre stack en quelques minutes via des connecteurs preconfigures." },
-        { num: "03", title: "Executez et mesurez", desc: "Lancez vos workflows manuellement ou en planifie. Suivez chaque etape en temps reel. Mesurez l'impact sur votre productivite." },
-      ],
-      persuasion: {
-        sectionTag: "Pourquoi maintenant",
-        title: "Vos agents IA travaillent seuls. Mal.",
-        paragraphs: [
-          { type: "pathos", text: "Mardi 14h. Votre equipe ops vient de decouvrir qu'un agent IA a tourne en boucle toute la nuit, brulant 3 200$ d'appels API pour produire un rapport qu'aucun humain ne lira. Pendant ce temps, votre agent commercial a oublie d'envoyer 47 follow-ups parce qu'il attendait une reponse d'un agent CRM qui avait crash six heures plus tot. Personne ne savait. Pas d'alerte. Pas de logs. Juste la facture OpenAI qui s'allume comme un sapin de Noel et un Slack ou trois directeurs se renvoient le bebe. C'est ca, l'IA sans orchestration : des agents brillants qui bossent en silence — et en chaos." },
-          { type: "logos", text: "McKinsey estime que 68% des entreprises ayant deploye des agents IA en production en 2025 n'ont aucune visibilite end-to-end sur leurs executions. Gartner predit qu'en 2027, 40% des projets agentic AI seront abandonnes avant 18 mois — pas a cause des modeles, mais a cause de l'orchestration. Forrester a mesure que les organisations dotees d'une couche d'orchestration multi-agents reduisent leur cout par workflow de 47% et leur time-to-production de 3.2x. L'IA generative est resolue. C'est l'IA operationnelle qui ne l'est pas." },
-          { type: "ethos", text: "Wikolabs construit des agents IA en production depuis 2023 pour des scale-ups B2B, family offices et fintechs reglementees. Nous avons brule nos doigts sur les memes problemes que vous : pipelines qui hallucinent, briefs ignores, dashboards desertes. AgentFlow est ce que nous avons construit pour nos propres clients exigeants avant de le proposer au marche." },
-          { type: "solution", text: "Concretement : vous dessinez votre workflow en drag-and-drop, vous connectez vos API et bases en quelques clics, et AgentFlow orchestre GPT-4, Claude, Mistral ou Llama selon l'etape — le bon modele au bon moment, avec la bonne marge de cout. Chaque action est loggee, replayable, auditable. 99.9% de fiabilite. 10x plus rapide qu'un workflow code a la main. Zero ligne de code requis. Vous lancez votre premier workflow en production en une journee, pas en un trimestre." },
-        ],
-      },
-      ctaTitle: "Automatisez vos workflows metier avec l'IA",
-      ctaDesc: "Demo en 30 minutes. Premier workflow operationnel en une journee. Aucune competence technique requise.",
-      ctaPrimary: "Reserver un appel",
-      ctaWhatsApp: "WhatsApp",
-      ctaDemo: "Demander une demo",
-      ctaSoonBadge: "Bientot",
-      footerTagline: "Plateforme d'orchestration multi-agents IA sans code",
-    },
-    en: {
-      langLabel: "EN",
-      tagLabel: "Multi-agent orchestration · No code · Reliable",
-      taglines: ["AI agents coordinated.", "Workflows automated.", "A business that runs itself."],
-      taglineAccentIdx: 1,
-      desc: "AgentFlow orchestrates multiple AI agents in parallel, coordinates models, manages dependencies and runs your complex business workflows with reliability and traceability.",
-      navLinks: [
-        { label: "Features", href: "#features" },
-        { label: "How it works", href: "#process" },
-        { label: "Why now", href: "#why" },
-        { label: "Contact", href: "#cta" },
-      ],
-      metrics: [
-        { value: "10x", label: "execution speed" },
-        { value: "99.9%", label: "reliability" },
-        { value: "∞", label: "parallel workflows" },
-        { value: "0", label: "code required" },
-      ],
-      features: [
-        { icon: "🔀", title: "Visual orchestration", desc: "Build your agent pipelines via drag-and-drop. Conditionals, loops, parallelism — all the complexity, without a line of code." },
-        { icon: "🤖", title: "Multi-model coordination", desc: "GPT-4, Claude, Mistral, Llama — AgentFlow calls the right model for each step. Automatic cost/performance optimization." },
-        { icon: "📋", title: "Logs and traceability", desc: "Every action by every agent is logged. Easy debugging, full audit trail, guaranteed reproducibility. Total trust on your critical workflows." },
-      ],
-      steps: [
-        { num: "01", title: "Draw your workflow", desc: "Visual drag-and-drop interface. Add agents, define inputs/outputs, configure conditions. No code required." },
-        { num: "02", title: "Connect your tools", desc: "REST APIs, webhooks, databases, Slack, emails — AgentFlow plugs into your stack in minutes via preconfigured connectors." },
-        { num: "03", title: "Run and measure", desc: "Launch your workflows manually or on a schedule. Track every step in real time. Measure the impact on productivity." },
-      ],
-      persuasion: {
-        sectionTag: "Why now",
-        title: "Your AI agents work alone. Badly.",
-        paragraphs: [
-          { type: "pathos", text: "Tuesday 2pm. Your ops team just discovered an AI agent looped all night, burning $3,200 of API calls to produce a report no human will read. Meanwhile, your sales agent forgot to send 47 follow-ups because it was waiting on a CRM agent that had crashed six hours earlier. Nobody knew. No alert. No logs. Just an OpenAI bill lighting up like a Christmas tree and a Slack thread where three directors pass the buck. That's AI without orchestration: brilliant agents working in silence — and in chaos." },
-          { type: "logos", text: "McKinsey estimates that 68% of companies running production AI agents in 2025 have zero end-to-end visibility on their executions. Gartner predicts that by 2027, 40% of agentic AI projects will be abandoned before 18 months — not because of the models, but because of orchestration. Forrester measured that organizations with a multi-agent orchestration layer cut their cost per workflow by 47% and their time-to-production by 3.2x. Generative AI is solved. Operational AI is not." },
-          { type: "ethos", text: "Wikolabs has been building production AI agents since 2023 for B2B scale-ups, family offices and regulated fintechs. We burned our fingers on the same problems you face: hallucinating pipelines, ignored briefs, abandoned dashboards. AgentFlow is what we built for our own demanding customers before bringing it to market." },
-          { type: "solution", text: "Concretely: you draw your workflow with drag-and-drop, you connect your APIs and databases in a few clicks, and AgentFlow orchestrates GPT-4, Claude, Mistral or Llama depending on the step — the right model at the right time, at the right cost margin. Every action is logged, replayable, auditable. 99.9% reliability. 10x faster than a hand-coded workflow. Zero code required. You ship your first production workflow in a day, not a quarter." },
-        ],
-      },
-      ctaTitle: "Automate your business workflows with AI",
-      ctaDesc: "30-minute demo. First workflow live in a day. No technical skills required.",
-      ctaPrimary: "Book a call",
-      ctaWhatsApp: "WhatsApp",
-      ctaDemo: "Request a demo",
-      ctaSoonBadge: "Soon",
-      footerTagline: "No-code multi-agent AI orchestration platform",
-    },
-  },
+const PRODUCT = "AgentFlow";
+
+const PAL = {
+  bg: "#1A1228",
+  bg2: "#251A38",
+  surface: "rgba(255,255,255,0.045)",
+  surfaceHover: "rgba(255,255,255,0.07)",
+  border: "rgba(255,255,255,0.10)",
+  txt1: "#EFE8FC",
+  txt2: "#A898B8",
+  txt3: "#706080",
+  accent: "#A78BFA",
+  accentSoft: "rgba(167,139,250,0.12)",
+  accentBorder: "rgba(167,139,250,0.30)",
+  accentGlow: "rgba(167,139,250,0.18)",
+  navBg: "rgba(26,18,40,0.82)",
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COMPONENT — identical for all LPs
-// ─────────────────────────────────────────────────────────────────────────────
-export default function Page() {
-  const [lang, setLang] = useState<"fr" | "en">("fr");
-  const t = P.content[lang];
-  const pal = P.palette;
-  const isDark = pal.mode === "dark";
-  const cardOverlayHover = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)";
+const EXAMPLES_FR = [
+  "Qualifier les leads inbound : enrichir, scorer, router au commercial, prevenir slack si lead chaud",
+  "Traiter une note de frais : extraire texte du recu, valider regles, ecrire dans Sage, prevenir manager",
+  "Onboarding client SaaS : creer compte, envoyer welcome email, programmer call demo, generer plan",
+];
+const EXAMPLES_EN = [
+  "Qualify inbound leads: enrich, score, route to sales, slack alert if hot",
+  "Process expense report: extract receipt text, validate rules, write to Sage, notify manager",
+  "SaaS customer onboarding: create account, send welcome email, schedule demo call, generate plan",
+];
 
-  const waLink = `https://wa.me/${P.waPhone}?text=${encodeURIComponent(
-    lang === "fr"
-      ? `Bonjour, je souhaite discuter de ${P.name} avec Wikolabs.`
-      : `Hello, I'd like to discuss ${P.name} with Wikolabs.`
-  )}`;
+export default function DemoPage() {
+  const [lang, setLang] = useState<"fr" | "en">("fr");
+  const [goal, setGoal] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [brief, setBrief] = useState("");
+  const [model, setModel] = useState("");
+  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+  const [staticMode, setStaticMode] = useState(false);
+
+  const t = lang === "fr" ? {
+    back: "Retour", title: "Demo", sub: PRODUCT + " — orchestration multi-agents IA",
+    desc: "Decrivez un objectif metier complexe (ex: qualifier des leads, automatiser un onboarding). Le compilateur AgentFlow propose les agents, les modeles, la sequence et les garde-fous. Aucune execution reelle — POC qui illustre la couche d'orchestration.",
+    inputLabel: "Objectif metier",
+    placeholder: "Ex: traiter une demande de credit client, de la reception du dossier a la decision finale...",
+    examplesLabel: "Exemples :",
+    generate: "Compiler le workflow", generating: "Compilation en cours...",
+    briefTitle: "Workflow compile", emptyHint: "Le workflow s'affiche ici une fois compile.",
+    mockN8n: "Exporter vers n8n", mockZapier: "Exporter vers Zapier",
+    mockAirflow: "Exporter vers Airflow", mockDeploy: "Deployer sur AgentFlow",
+    sentN8n: "Workflow exporte au format n8n (mode demo, pas d'instance reelle)",
+    sentZapier: "Workflow exporte au format Zapier (mode demo, pas d'API reelle)",
+    sentAirflow: "DAG Airflow genere (mode demo, pas de cluster reel)",
+    sentDeploy: "Workflow deploye sur AgentFlow runtime (mode demo, pas de runtime reel)",
+    fallback: "Mode statique : la cle LLM sera ajoutee au prochain deploiement.",
+    poweredBy: "Modele :",
+    note: "DEMO POC — pas d'execution reelle d'agents, pas d'export n8n/Zapier/Airflow. L'IA simule le compilateur d'orchestration.",
+  } : {
+    back: "Back", title: "Demo", sub: PRODUCT + " — multi-agent AI orchestration",
+    desc: "Describe a complex business goal (e.g. qualify leads, automate onboarding). The AgentFlow compiler proposes agents, models, sequence and guardrails. No real execution — POC showing the orchestration layer.",
+    inputLabel: "Business goal",
+    placeholder: "E.g. process a customer credit request, from intake to final decision...",
+    examplesLabel: "Examples:",
+    generate: "Compile workflow", generating: "Compiling...",
+    briefTitle: "Compiled workflow", emptyHint: "The workflow will appear here once compiled.",
+    mockN8n: "Export to n8n", mockZapier: "Export to Zapier",
+    mockAirflow: "Export to Airflow", mockDeploy: "Deploy to AgentFlow",
+    sentN8n: "Workflow exported in n8n format (demo mode, no real instance)",
+    sentZapier: "Workflow exported in Zapier format (demo mode, no real API)",
+    sentAirflow: "Airflow DAG generated (demo mode, no real cluster)",
+    sentDeploy: "Workflow deployed to AgentFlow runtime (demo mode, no real runtime)",
+    fallback: "Static mode: LLM key will be added at next deploy.",
+    poweredBy: "Model:",
+    note: "DEMO POC — no real agent execution, no n8n/Zapier/Airflow export. The AI simulates the orchestration compiler.",
+  };
+
+  const examples = lang === "fr" ? EXAMPLES_FR : EXAMPLES_EN;
+
+  async function generate() {
+    setError(""); setBrief(""); setModel(""); setStaticMode(false);
+    if (!goal.trim()) {
+      setError(lang === "fr" ? "Decrivez un objectif." : "Describe a goal.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const r = await fetch("/api/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goal, lang }),
+      });
+      const j = await r.json();
+      if (j.error === "llm_not_configured") {
+        setBrief(j.mockBrief || "");
+        setStaticMode(true);
+      } else if (j.error) {
+        setError(j.message || j.error);
+      } else {
+        setBrief(j.brief || "");
+        setModel(j.model || "");
+      }
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "unknown_error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3200);
+  }
 
   return (
-    <div style={{ minHeight: "100vh", background: pal.bg, color: pal.txt1 }}>
+    <div style={{ minHeight: "100vh", background: PAL.bg, color: PAL.txt1, display: "flex", flexDirection: "column" }}>
       <style>{`
         *, *::before, *::after { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-        @keyframes wkBgShift { 0% { transform: translate3d(0,0,0) rotate(0deg); } 50% { transform: translate3d(-2%, 1.5%, 0) rotate(180deg); } 100% { transform: translate3d(0,0,0) rotate(360deg); } }
-        .wk-bg-fx { position: fixed; inset: -10%; pointer-events: none; z-index: 0; opacity: .55; will-change: transform; animation: wkBgShift 38s linear infinite; }
-        .wk-bg-fx::before, .wk-bg-fx::after { content: ""; position: absolute; inset: 0; }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes pulseDot { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:.4; transform:scale(1.6); } }
-        .wk-card { transition: background .3s, border-color .3s, transform .35s cubic-bezier(.34,1.2,.64,1); }
-        .wk-card:hover { background: ${cardOverlayHover} !important; border-color: ${pal.accentBorder} !important; transform: translateY(-6px); }
-        .wk-btn { transition: opacity .2s, transform .2s, box-shadow .2s; }
-        .wk-btn:hover { opacity:.92; transform:translateY(-2px); box-shadow:0 12px 32px ${pal.accentGlow}; }
-        .wk-btn-wa { transition: opacity .2s, transform .2s; }
-        .wk-btn-wa:hover { opacity:.92; transform:translateY(-2px); }
-        .wk-btn-demo { opacity:.78; transition: opacity .2s, transform .2s, background .2s; }
-        .wk-btn-demo:hover { opacity:1; transform:translateY(-2px); background:${pal.accentSoft}!important; }
-        .wk-nav-link { color:${pal.txt2}; text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; }
-        .wk-nav-link:hover { color:${pal.txt1}; }
-        .wk-lang { display:inline-flex; border:1px solid ${pal.border}; border-radius:100px; padding:2px; background:${pal.surface}; }
-        .wk-lang button { background:transparent; border:none; padding:4px 12px; font-size:11px; font-weight:700; letter-spacing:.5px; cursor:pointer; border-radius:100px; color:${pal.txt2}; transition: background .2s, color .2s; font-family:inherit; }
-        .wk-lang button.active { background:${pal.accent}; color:${isDark ? "#04080F" : "#FFFFFF"}; }
-        @media(max-width:768px){
-          .wk-hide-sm{ display:none!important; }
-          .wk-hero-title{ font-size:2.4rem!important; }
-          .wk-section{ padding-left:20px!important; padding-right:20px!important; }
-          .wk-cards-grid{ grid-template-columns: 1fr !important; max-width:380px; margin-left:auto; margin-right:auto; }
-          .wk-metrics-row{ justify-content:center; }
-          .wk-cta-row{ flex-direction:column; align-items:stretch; max-width:340px; margin-left:auto; margin-right:auto; }
-          .wk-cta-row > *{ width:100%; justify-content:center; }
-          .wk-persuasion{ padding:60px 20px!important; }
-          .wk-foot{ flex-direction:column; gap:12px; text-align:center; }
+        body { margin: 0; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        .wk-textarea { width: 100%; padding: 12px 14px; border-radius: 10px; background: ${PAL.surface}; border: 1px solid ${PAL.border}; color: ${PAL.txt1}; font-family: inherit; font-size: 14px; resize: vertical; min-height: 130px; transition: border-color .2s, background .2s; line-height: 1.5; }
+        .wk-textarea:focus { outline: none; border-color: ${PAL.accent}; background: ${PAL.surfaceHover}; }
+        .wk-btn-primary { background: ${PAL.accent}; color: #04080F; border: none; border-radius: 10px; padding: 13px 22px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; transition: opacity .2s, transform .2s; display: inline-flex; align-items: center; gap: 8px; }
+        .wk-btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+        .wk-btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+        .wk-btn-ghost { background: ${PAL.surface}; color: ${PAL.txt1}; border: 1px solid ${PAL.border}; border-radius: 10px; padding: 9px 14px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; transition: background .2s, border-color .2s; display: inline-flex; align-items: center; gap: 6px; }
+        .wk-btn-ghost:hover { background: ${PAL.surfaceHover}; border-color: ${PAL.accentBorder}; }
+        .wk-chip { background: ${PAL.surface}; color: ${PAL.txt2}; border: 1px solid ${PAL.border}; border-radius: 100px; padding: 6px 11px; font-size: 11px; cursor: pointer; font-family: inherit; transition: background .2s, color .2s; }
+        .wk-chip:hover { background: ${PAL.accentSoft}; color: ${PAL.txt1}; border-color: ${PAL.accentBorder}; }
+        .wk-md p, .wk-md ul { margin: 0 0 10px; }
+        .wk-md ul { padding-left: 18px; }
+        .wk-md li { margin-bottom: 4px; line-height: 1.65; }
+        .wk-md strong { color: ${PAL.accent}; font-weight: 700; display: block; margin-top: 10px; margin-bottom: 4px; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        .wk-md li strong { display: inline; font-size: inherit; letter-spacing: 0; text-transform: none; margin: 0; }
+        @media (max-width: 768px) {
+          .demo-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
-      {/* NAVBAR */}
-      <nav className="wk-section" style={{ position:"sticky", top:0, zIndex:100, background:pal.navBg, backdropFilter:"blur(20px)", borderBottom:`1px solid ${pal.border}`, padding:"0 40px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <span style={{ fontSize:18, fontWeight:800, letterSpacing:"-0.5px", color:pal.txt1 }}>
-          {P.name}<span style={{ color:pal.accent }}>.</span>
-        </span>
-        <div style={{ display:"flex", gap:24, alignItems:"center" }}>
-          <div className="wk-hide-sm" style={{ display:"flex", gap:22 }}>
-            {t.navLinks.map(l => <a key={l.label} href={l.href} className="wk-nav-link">{l.label}</a>)}
-          </div>
-          <div className="wk-lang" role="group" aria-label="language">
-            <button type="button" className={lang==="fr"?"active":""} onClick={()=>setLang("fr")}>FR</button>
-            <button type="button" className={lang==="en"?"active":""} onClick={()=>setLang("en")}>EN</button>
-          </div>
-          <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' className="wk-btn"
-            style={{ background:pal.accent, color:isDark?"#04080F":"#FFFFFF", border:"none", borderRadius:8, padding:"9px 18px", fontWeight:700, fontSize:13.5, cursor:"pointer", fontFamily:"inherit" }}>
-            {t.ctaPrimary} →
-          </button>
+      <nav style={{ padding: "16px 32px", borderBottom: `1px solid ${PAL.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", background: PAL.navBg, backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 10 }}>
+        <a href="/" style={{ color: PAL.accent, textDecoration: "none", fontSize: 14, fontWeight: 600 }}>
+          ← {t.back} {PRODUCT}<span style={{ color: PAL.accent }}>.</span>
+        </a>
+        <div style={{ display: "inline-flex", border: `1px solid ${PAL.border}`, borderRadius: 100, padding: 2, background: PAL.surface }}>
+          <button onClick={() => setLang("fr")} style={{ background: lang === "fr" ? PAL.accent : "transparent", color: lang === "fr" ? "#04080F" : PAL.txt2, border: "none", padding: "4px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", borderRadius: 100, fontFamily: "inherit" }}>FR</button>
+          <button onClick={() => setLang("en")} style={{ background: lang === "en" ? PAL.accent : "transparent", color: lang === "en" ? "#04080F" : PAL.txt2, border: "none", padding: "4px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", borderRadius: 100, fontFamily: "inherit" }}>EN</button>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="wk-section" style={{ padding:"100px 40px 80px", maxWidth:1040, margin:"0 auto", textAlign:"center", position:"relative" }}>
-        <div style={{ position:"absolute", top:-60, left:"50%", transform:"translateX(-50%)", width:720, height:600, background:`radial-gradient(ellipse at 50% 30%, ${pal.accentGlow} 0%, transparent 60%)`, pointerEvents:"none" }} />
-        <div style={{ display:"inline-flex", alignItems:"center", gap:8, marginBottom:24, background:pal.accentSoft, border:`1px solid ${pal.accentBorder}`, borderRadius:100, padding:"6px 18px", animation:"fadeUp .5s ease both" }}>
-          <span style={{ width:7, height:7, borderRadius:"50%", background:pal.accent, display:"inline-block", animation:"pulseDot 2s ease-in-out infinite" }} />
-          <span style={{ color:pal.accent, fontSize:11.5, fontWeight:700, letterSpacing:"2px", textTransform:"uppercase" }}>{t.tagLabel}</span>
-        </div>
-        <h1 className="wk-hero-title" style={{ fontSize:"clamp(2.6rem,6vw,5rem)", fontWeight:700, lineHeight:1.08, letterSpacing:"-0.03em", marginBottom:28, fontFamily:"'Instrument Serif',Georgia,serif", animation:"fadeUp .5s .08s ease both" }}>
-          {t.taglines.map((line, i) => (
-            <span key={i} style={{ display:"block", color:i===t.taglineAccentIdx?pal.accent:pal.txt1, fontStyle:i===t.taglineAccentIdx?"italic":"normal" }}>{line}</span>
-          ))}
+      <main style={{ flex: 1, padding: "32px", maxWidth: 1200, margin: "0 auto", width: "100%" }}>
+        <h1 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 700, margin: "0 0 6px" }}>
+          {t.title} · <em style={{ fontStyle: "italic", color: PAL.accent }}>{PRODUCT}</em>
         </h1>
-        <p style={{ fontSize:"1.1rem", color:pal.txt2, lineHeight:1.72, maxWidth:600, margin:"0 auto 44px", animation:"fadeUp .5s .16s ease both" }}>{t.desc}</p>
-        <div className="wk-metrics-row" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:14, marginBottom:44, animation:"fadeUp .5s .24s ease both" }}>
-          {t.metrics.map(m => (
-            <div key={m.label} style={{ background:pal.surface, border:`1px solid ${pal.border}`, borderRadius:18, padding:"14px 22px", textAlign:"center", minWidth:118 }}>
-              <div style={{ fontSize:"1.7rem", fontWeight:800, color:pal.txt1, letterSpacing:"-1.5px", lineHeight:1 }}>{m.value}</div>
-              <div style={{ fontSize:"0.62rem", color:pal.txt3, textTransform:"uppercase", letterSpacing:"1.5px", marginTop:5 }}>{m.label}</div>
-            </div>
-          ))}
-        </div>
-        <CtaRow t={t} pal={pal} isDark={isDark} waLink={waLink} />
-      </section>
+        <p style={{ color: PAL.txt2, fontSize: "0.95rem", lineHeight: 1.65, maxWidth: 720, margin: "0 0 6px" }}>{t.sub}</p>
+        <p style={{ color: PAL.txt3, fontSize: "0.78rem", lineHeight: 1.55, maxWidth: 720, margin: "0 0 28px" }}>{t.desc}</p>
 
-      {/* FEATURES */}
-      <section id="features" className="wk-section" style={{ padding:"80px 40px", maxWidth:1100, margin:"0 auto" }}>
-        <SectionHead pal={pal} tag={lang==="fr"?"Fonctionnalites":"Features"} title={lang==="fr"?"Tout automatise, <em>rien a gerer</em>":"Fully automated, <em>nothing to manage</em>"} />
-        <div className="wk-cards-grid" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:20 }}>
-          {t.features.map((f, i) => (
-            <div key={f.title} className="wk-card" style={{ background:pal.surface, border:`1px solid ${pal.border}`, borderRadius:20, padding:"28px 28px 26px", position:"relative", overflow:"hidden" }}>
-              <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,transparent,${pal.accent},transparent)`, opacity:.55 }} />
-              <div style={{ fontSize:"2rem", marginBottom:16 }}>{f.icon}</div>
-              <h3 style={{ fontSize:"1.05rem", fontWeight:700, color:pal.txt1, marginBottom:10 }}>{f.title}</h3>
-              <p style={{ fontSize:"0.88rem", color:pal.txt2, lineHeight:1.7, margin:0 }}>{f.desc}</p>
+        <div className="demo-grid" style={{ display: "grid", gridTemplateColumns: "400px 1fr", gap: 24 }}>
+          <section style={{ background: PAL.surface, border: `1px solid ${PAL.border}`, borderRadius: 16, padding: 22 }}>
+            <h2 style={{ fontSize: "0.72rem", color: PAL.txt3, textTransform: "uppercase", letterSpacing: 2, fontWeight: 700, margin: "0 0 14px" }}>{t.inputLabel}</h2>
+            <textarea className="wk-textarea" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder={t.placeholder} />
+            <p style={{ color: PAL.txt3, fontSize: 11, marginTop: 12, marginBottom: 8 }}>{t.examplesLabel}</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+              {examples.map((e, i) => (
+                <button key={i} className="wk-chip" onClick={() => setGoal(e)}>{e.length > 48 ? e.slice(0, 45) + "..." : e}</button>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+            <button className="wk-btn-primary" disabled={loading} onClick={generate} style={{ width: "100%", justifyContent: "center" }}>
+              {loading ? `⏳ ${t.generating}` : `✨ ${t.generate}`}
+            </button>
+            {error && <div style={{ marginTop: 12, color: "#F87171", fontSize: 13, padding: "8px 12px", background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.3)", borderRadius: 8 }}>{error}</div>}
+            <p style={{ color: PAL.txt3, fontSize: 11, lineHeight: 1.5, marginTop: 18, marginBottom: 0, paddingTop: 14, borderTop: `1px solid ${PAL.border}` }}>{t.note}</p>
+          </section>
 
-      {/* HOW IT WORKS */}
-      <section id="process" className="wk-section" style={{ padding:"80px 40px", background:pal.bg2 }}>
-        <div style={{ maxWidth:860, margin:"0 auto" }}>
-          <SectionHead pal={pal} tag={lang==="fr"?"Comment ca marche":"How it works"} title={lang==="fr"?"En place en <em>10 minutes</em>":"Live in <em>10 minutes</em>"} />
-          <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-            {t.steps.map((s, i) => (
-              <div key={s.num} style={{ display:"flex", alignItems:"flex-start", gap:22, background:pal.surface, border:`1px solid ${pal.border}`, borderRadius:18, padding:"22px 26px" }}>
-                <div style={{ flexShrink:0, width:46, height:46, background:pal.accentSoft, border:`1px solid ${pal.accentBorder}`, borderRadius:14, display:"flex", alignItems:"center", justifyContent:"center", color:pal.accent, fontWeight:800, fontSize:15 }}>
-                  {s.num}
-                </div>
-                <div>
-                  <h3 style={{ fontSize:"1rem", fontWeight:700, color:pal.txt1, marginBottom:6, lineHeight:1.3 }}>{s.title}</h3>
-                  <p style={{ fontSize:"0.87rem", color:pal.txt2, lineHeight:1.7, margin:0 }}>{s.desc}</p>
-                </div>
+          <section style={{ background: PAL.bg2, border: `1px solid ${PAL.border}`, borderRadius: 16, padding: 22, minHeight: 420, display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <h2 style={{ fontSize: "0.72rem", color: PAL.txt3, textTransform: "uppercase", letterSpacing: 2, fontWeight: 700, margin: 0, display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: brief ? "#22C55E" : PAL.txt3 }} />
+                {t.briefTitle}
+              </h2>
+              {model && <span style={{ fontSize: 10, color: PAL.txt3, fontFamily: "monospace" }}>{t.poweredBy} {model}</span>}
+            </div>
+
+            {!brief ? (
+              <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: PAL.txt3, fontSize: 14, textAlign: "center", padding: 30 }}>
+                {t.emptyHint}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            ) : (
+              <div className="wk-md" style={{ color: PAL.txt1, fontSize: 14, lineHeight: 1.7, flex: 1 }} dangerouslySetInnerHTML={{ __html: renderMarkdown(brief) }} />
+            )}
 
-      {/* TOOLS INTEGRATED — logos of the stack we operate for you */}
-      <section id="tools" className="wk-section" style={{ padding:"80px 40px", maxWidth:1100, margin:"0 auto" }}>
-        <SectionHead pal={pal} tag={lang==="fr"?"Outils integres":"Tools we operate"} title={lang==="fr"?"On opere <em>votre stack</em>, vous n'avez rien a apprendre":"We operate <em>your stack</em>, you don't have to learn it"} />
-        <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:12 }}>
-          {P.tools.map(tool => (
-            <div key={tool.slug} style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"10px 16px", background:pal.surface, border:`1px solid ${pal.border}`, borderRadius:100, fontSize:13, color:pal.txt1, fontWeight:600, transition:"transform .2s, border-color .2s" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`https://cdn.simpleicons.org/${tool.slug}/${pal.accent.replace('#','')}`} alt={tool.name} width={18} height={18} style={{ flexShrink:0 }} />
-              <span>{tool.name}</span>
-            </div>
-          ))}
-        </div>
-        <p style={{ textAlign:"center", color:pal.txt3, fontSize:12, marginTop:24, maxWidth:540, marginLeft:"auto", marginRight:"auto" }}>
-          {lang==="fr" ? "Vous n'avez pas a apprendre ces outils — on les opere pour vous. Vous payez l'abonnement, c'est dans votre Slack demain matin." : "You don't have to learn these tools — we operate them for you. You pay the subscription, it's in your Slack tomorrow morning."}
-        </p>
-      </section>
-
-      {/* PERSUASION — pathos / logos / ethos / solution */}
-      <section id="why" className="wk-persuasion wk-section" style={{ padding:"100px 40px", maxWidth:860, margin:"0 auto" }}>
-        <SectionHead pal={pal} tag={t.persuasion.sectionTag} title={t.persuasion.title} />
-        <div style={{ display:"flex", flexDirection:"column", gap:22 }}>
-          {t.persuasion.paragraphs.map((p, i) => {
-            const labelMap: Record<string, { fr: string; en: string }> = {
-              pathos:   { fr: "L'enjeu humain",  en: "What's at stake" },
-              logos:    { fr: "Les faits",       en: "The facts" },
-              ethos:    { fr: "Notre legitimite", en: "Our credibility" },
-              solution: { fr: "Notre reponse",   en: "Our answer" },
-            };
-            const label = labelMap[p.type]?.[lang] ?? "";
-            return (
-              <div key={i} style={{ borderLeft:`2px solid ${pal.accentBorder}`, paddingLeft:22 }}>
-                <div style={{ fontSize:"0.62rem", fontWeight:700, letterSpacing:"2.5px", textTransform:"uppercase", color:pal.accent, marginBottom:10 }}>{label}</div>
-                <p style={{ fontSize:"1.02rem", color:pal.txt2, lineHeight:1.85, margin:0 }}>{p.text}</p>
+            {brief && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 18, paddingTop: 18, borderTop: `1px solid ${PAL.border}` }}>
+                <button className="wk-btn-ghost" onClick={() => showToast(t.sentN8n)}>🔗 {t.mockN8n}</button>
+                <button className="wk-btn-ghost" onClick={() => showToast(t.sentZapier)}>⚡ {t.mockZapier}</button>
+                <button className="wk-btn-ghost" onClick={() => showToast(t.sentAirflow)}>🌊 {t.mockAirflow}</button>
+                <button className="wk-btn-ghost" onClick={() => showToast(t.sentDeploy)}>🚀 {t.mockDeploy}</button>
               </div>
-            );
-          })}
+            )}
+            {staticMode && <div style={{ marginTop: 14, color: PAL.txt3, fontSize: 12, fontStyle: "italic" }}>{t.fallback}</div>}
+          </section>
         </div>
-      </section>
+      </main>
 
-      {/* CTA */}
-      <section id="cta" className="wk-section" style={{ padding:"0 40px 100px", maxWidth:860, margin:"0 auto" }}>
-        <div style={{ background:pal.surface, border:`1px solid ${pal.accentBorder}`, borderRadius:24, padding:"64px 48px", textAlign:"center", backgroundImage:`radial-gradient(ellipse at 50% 0%, ${pal.accentSoft} 0%, transparent 65%)` }}>
-          <p style={{ fontSize:"0.68rem", color:pal.accent, letterSpacing:"3px", textTransform:"uppercase", fontWeight:700, marginBottom:16 }}>{lang==="fr"?"Demarrer":"Get started"}</p>
-          <h2 style={{ fontSize:"clamp(1.8rem,3.5vw,2.8rem)", fontWeight:700, color:pal.txt1, marginBottom:14, letterSpacing:"-0.02em", fontFamily:"'Instrument Serif',Georgia,serif" }}>{t.ctaTitle}</h2>
-          <p style={{ color:pal.txt2, fontSize:"1rem", marginBottom:36, lineHeight:1.7, maxWidth:540, margin:"0 auto 36px" }}>{t.ctaDesc}</p>
-          <CtaRow t={t} pal={pal} isDark={isDark} waLink={waLink} />
+      {toast && (
+        <div style={{ position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", background: PAL.surface, border: `1px solid ${PAL.accentBorder}`, borderRadius: 12, padding: "12px 20px", color: PAL.txt1, fontSize: 13, fontWeight: 600, zIndex: 50, backdropFilter: "blur(20px)", boxShadow: "0 8px 28px rgba(0,0,0,0.4)" }}>
+          ✓ {toast}
         </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="wk-section" style={{ borderTop:`1px solid ${pal.border}`, padding:"32px 40px" }}>
-        <div className="wk-foot" style={{ maxWidth:1200, margin:"0 auto", display:"flex", flexWrap:"wrap", justifyContent:"space-between", alignItems:"center", gap:16 }}>
-          <div>
-            <span style={{ fontWeight:800, fontSize:16, color:pal.txt1 }}>{P.name}</span><span style={{ color:pal.accent }}>.</span>
-            <span style={{ display:"block", fontSize:12, color:pal.txt3, marginTop:3 }}>{t.footerTagline}</span>
-          </div>
-          <p style={{ fontSize:13, color:pal.txt3, margin:0 }}>© 2026 {P.name} — {lang==="fr"?"Un produit":"A product by"} <a href="https://wikolabs.com" style={{ color:pal.txt2, textDecoration:"none" }}>Wikolabs</a></p>
-          <div style={{ display:"flex", flexWrap:"wrap", gap:16, fontSize:13, alignItems:"center" }}>
-            <a href="mailto:team@wikolabs.com" style={{ color:pal.txt3, textDecoration:"none" }}>team@wikolabs.com</a>
-            <span style={{ color:pal.txt3 }}>·</span>
-            <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' style={{ background:"none", border:"none", color:pal.txt3, fontSize:13, cursor:"pointer", fontFamily:"inherit", padding:0 }}>{t.ctaPrimary}</button>
-          </div>
-        </div>
-      </footer>
+      )}
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-function SectionHead({ pal, tag, title }: { pal: typeof P.palette; tag: string; title: string }) {
-  return (
-    <div style={{ textAlign:"center", marginBottom:52 }}>
-      <p style={{ fontSize:"0.68rem", color:pal.accent, letterSpacing:"3px", textTransform:"uppercase", fontWeight:700, marginBottom:14 }}>{tag}</p>
-      <h2
-        style={{ fontSize:"clamp(1.8rem,3.5vw,2.8rem)", fontWeight:700, color:pal.txt1, letterSpacing:"-0.02em", fontFamily:"'Instrument Serif',Georgia,serif", lineHeight:1.15, margin:0 }}
-        dangerouslySetInnerHTML={{ __html: title.replace(/<em>/g, `<em style="font-style:italic;color:${pal.accent}">`) }}
-      />
-    </div>
-  );
-}
-
-function CtaRow({ t, pal, isDark, waLink }: { t: typeof P.content.fr; pal: typeof P.palette; isDark: boolean; waLink: string }) {
-  return (
-    <div className="wk-cta-row" style={{ display:"flex", flexWrap:"wrap", gap:12, justifyContent:"center", animation:"fadeUp .5s .32s ease both" }}>
-      <button data-cal-link="wikolabs-team/30min" data-cal-namespace="wk30min" data-cal-config='{"layout":"month_view"}' className="wk-btn"
-        style={{ background:pal.accent, color:isDark?"#04080F":"#FFFFFF", border:"none", borderRadius:10, padding:"14px 28px", fontWeight:700, fontSize:15, cursor:"pointer", display:"inline-flex", alignItems:"center", gap:8, fontFamily:"inherit" }}>
-        📅 {t.ctaPrimary}
-      </button>
-      <a href={waLink} target="_blank" rel="noopener noreferrer" className="wk-btn-wa"
-        style={{ background:"#25d366", color:"#FFFFFF", borderRadius:10, padding:"14px 28px", fontWeight:700, fontSize:15, textDecoration:"none", display:"inline-flex", alignItems:"center", gap:8 }}>
-        💬 {t.ctaWhatsApp}
-      </a>
-      <a href="/demo" className="wk-btn-demo" data-orig-btn="1"
-        style={{ background:"transparent", color:pal.txt2, border:`1px solid ${pal.border}`, borderRadius:10, padding:"14px 28px", fontWeight:700, fontSize:15, display:"inline-flex", alignItems:"center", gap:10, fontFamily:"inherit", position:"relative" }}>
-        ✨ {t.ctaDemo}
-      </a>
-    </div>
-  );
+function renderMarkdown(md: string): string {
+  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const blocks: string[] = [];
+  let listBuf: string[] = [];
+  const flushList = () => {
+    if (listBuf.length) {
+      blocks.push("<ul>" + listBuf.map((l) => `<li>${l}</li>`).join("") + "</ul>");
+      listBuf = [];
+    }
+  };
+  for (const raw of md.split("\n")) {
+    const line = raw.trim();
+    if (!line) { flushList(); continue; }
+    if (line.startsWith("- ")) {
+      listBuf.push(esc(line.slice(2)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"));
+    } else if (line.startsWith("**") && line.endsWith("**")) {
+      flushList();
+      blocks.push(`<strong>${esc(line.slice(2, -2))}</strong>`);
+    } else {
+      flushList();
+      blocks.push(`<p>${esc(line).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`);
+    }
+  }
+  flushList();
+  return blocks.join("");
 }
